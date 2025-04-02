@@ -1,0 +1,7121 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "ngx-admin Backend Bundle API",
+    "description": "ngx-admin Backend Bundle API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "server": {
+      "url": "https://devhsncverify.studentscenter.in",
+      "description": "Development server"
+    }
+  },
+  "basePath": "/server/api",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "authentication"
+    },
+    {
+      "name": "Users",
+      "description": "users api"
+    },
+    {
+      "name": "Settings",
+      "description": "settings api"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Bearer <my own JWT token>"
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "User Authentication returning a JWT",
+        "description": "Authenticate a user",
+        "parameters": [
+          {
+            "name": "loginDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/loginDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-up": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign up new user",
+        "description": "Sign up new user",
+        "parameters": [
+          {
+            "name": "signUpDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/signUpDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/Token"
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-pass": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Change password",
+        "description": "Change password for current user",
+        "parameters": [
+          {
+            "name": "changePasswordDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/changePasswordDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/request-pass": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Request password",
+        "description": "Request password by email",
+        "parameters": [
+          {
+            "name": "requestPasswordDto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/sign-out": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Sign out",
+        "description": "Sign out",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Refresh user token",
+        "description": "Refresh user token",
+        "parameters": [
+          {
+            "name": "refreshTokenDTO",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "refresh_token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Users list",
+        "description": "Gets users list",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "filterByfirstName",
+            "in": "query",
+            "description": "Should filter by first name field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filterBylastName",
+            "in": "query",
+            "description": "Should filter by last name field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filterBylogin",
+            "in": "query",
+            "description": "Should filter by user name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filterByemail",
+            "in": "query",
+            "description": "Should filter by email",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filterByage",
+            "in": "query",
+            "description": "Should filter by age",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filterBystreet",
+            "in": "query",
+            "description": "Should filter by street",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filterBycity",
+            "in": "query",
+            "description": "Should filter by city",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filterByzipcode",
+            "in": "query",
+            "description": "Should filter by zip code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Should sort by field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "Order direction ASC / DESC",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return list of users (filtered users by query params) and total count of users in response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "allOf": [
+                      {
+                        "$ref": "#/definitions/User"
+                      },
+                      {
+                        "properties": {
+                          "settings": {
+                            "type": "object",
+                            "$ref": "#/definitions/Settings"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "totalCount": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Add new user",
+        "description": "Add new user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "NewUserDto",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get current user",
+        "description": "Get current user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return current user",
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/User"
+                },
+                {
+                  "properties": {
+                    "settings": {
+                      "type": "object",
+                      "$ref": "#/definitions/Settings"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update current user",
+        "description": "Update current user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "UserDto",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return current user",
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/User"
+                },
+                {
+                  "properties": {
+                    "settings": {
+                      "type": "object",
+                      "$ref": "#/definitions/Settings"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "409": {
+            "description": "Email is exist",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "field": {
+                          "type": "email"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user by id",
+        "description": "Get user by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "User Id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return user by id",
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/User"
+                },
+                {
+                  "properties": {
+                    "settings": {
+                      "type": "object",
+                      "$ref": "#/definitions/Settings"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update current user",
+        "description": "Update current user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "UserDto",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return edited user",
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/User"
+                },
+                {
+                  "properties": {
+                    "settings": {
+                      "type": "object",
+                      "$ref": "#/definitions/Settings"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "409": {
+            "description": "Email is exist",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "metadata": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "field": {
+                          "type": "email"
+                        },
+                        "type": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete user by id",
+        "description": "Delete user by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "User Id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return user by id",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings/current": {
+      "get": {
+        "tags": [
+          "Settings"
+        ],
+        "summary": "Get settings for current user",
+        "description": "Get settings for current user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return user settings",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "themeName": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Settings"
+        ],
+        "summary": "Get settings for current user",
+        "description": "Get settings for current user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "SettingsDto",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "themeName": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return edited settings",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "themeName": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/application/addApplication": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Insert students Education details",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Edu_details",
+            "description": "All Education Details",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "studentData": {
+                  "type": "object",
+                  "$ref": "#/definitions/studentData"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Education details added successfully!!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/updateApplication": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Update students Educational Details",
+        "description": "Update Educational Details",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Edu_details ",
+            "description": "Update students Educational Details",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "studentData": {
+                  "type": "object",
+                  "$ref": "#/definitions/studentData"
+                },
+                "create_by": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Educational Data Updated"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/applicationdata": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Admin Data",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "description": "User Id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "1516"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/documentdetailsdata": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get all DocumentsDetails",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Get data by User_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "example": "1516"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getAdminIdWise": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Admins Detail IdWise",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Get data by app_id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "example": "89"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getApplications": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get All Admins Detail",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Data Get Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getAgents": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Agents Personal Details",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Data Get Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/help": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Create frequently Asked Question by Admin",
+        "description": "Create frequently Asked Question by Admin",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "FAQ ",
+            "description": "Create frequently Asked Question by Admin",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Inserted Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get FAQ Data",
+        "description": "No Parameter required",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/pending_students": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get the total Pending students",
+        "description": "Get Total number of Pending students",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "example": "11",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "trascript"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "MAITRI"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "shreyanshsolanki3@gmail.com"
+            }
+          },
+          {
+            "name": "acadYear",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2020"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": "13"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/verifyparticularDocuments": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Verify Particular Documents",
+        "description": "Verify Particular Documents",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Verify_doc",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/verifyDoc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verified Documents Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/saveOutward": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Save Outward Number",
+        "description": "Save Outward Number",
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "app_id": {
+                  "type": "string",
+                  "example": "10635"
+                },
+                "outward": {
+                  "type": "string",
+                  "example": "121212"
+                },
+                "letterFormat": {
+                  "type": "string",
+                  "example": "png"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "marksheet"
+                },
+                "user_id": {
+                  "type": "string",
+                  "example": "11865"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Save Outward number Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/setVerified": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Change the tracker Pending to Verified",
+        "description": "",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "app_id": {
+                  "type": "string",
+                  "example": "10635"
+                },
+                "value": {
+                  "type": "string",
+                  "example": "pending"
+                },
+                "adminEmail": {
+                  "type": "string",
+                  "example": "admin@edulab.in"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getAdminSideDetails": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Students document Details",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1516"
+            }
+          },
+          {
+            "name": "app_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "89"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get All Details Sucessfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/verified_students": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get the total Signed students",
+        "description": "To Get the total Signed students",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Vandana"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "vandana@edulab.in"
+            }
+          },
+          {
+            "name": "acadYear",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2020"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get All Details Sucessfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/downloadDocuments": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Download Documents",
+        "description": "Download Documents",
+        "parameters": [
+          {
+            "name": "documentFile",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "GLUOAbcQiS.pdf"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Download Documents Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/generateCertificates": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Generate Certificate and Merged Certificate",
+        "description": "Generate Certificate and Merged Certificate",
+        "parameters": [
+          {
+            "name": "gene_QR",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "app_id": {
+                  "type": "string",
+                  "example": ""
+                },
+                "userId": {
+                  "type": "string",
+                  "example": ""
+                },
+                "adminEmail": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Certificate Generated Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/downloadExcel": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "File to Download",
+        "description": "File to Download",
+        "parameters": [
+          {
+            "name": "tracker",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "verified"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "marksheet"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "22/05/22"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "22/06/22"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Succ"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/downloadFiles": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "It Gets the file path for downloading files",
+        "description": "It Gets the file path for downloading files",
+        "parameters": [
+          {
+            "name": "documentFile",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/signed_students": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get the total Signed students",
+        "description": "To Get the total Signed students",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Vandana"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "vandana@edulab.in"
+            }
+          },
+          {
+            "name": "acadYear",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2020"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Student retrive successfully"
+          },
+          "400": {
+            "description": "Problem in retrieving student list"
+          }
+        }
+      }
+    },
+    "/application/checksignedpdf": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Check Signed PDF",
+        "description": "To Check Signed PDF",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "89"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1516"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check Signed PDF Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/sendEmail": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Email Send  ",
+        "description": "Email Send ",
+        "parameters": [
+          {
+            "name": "email_data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "263"
+                },
+                "adminEmail": {
+                  "type": "string",
+                  "example": "vandana@edulab.in"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "25"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "You don't have persmission"
+          }
+        }
+      }
+    },
+    "/application/getVerificationLetters": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get File Path and Certificate ",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getInstituteAddress": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Generate Institute Address PDF",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "89"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1516"
+            }
+          },
+          {
+            "name": "section",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Top"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/emailed_students": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Total Sent(emailed) students",
+        "description": "To Get total the emailed students",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Vandana"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "vandana@edulab.in"
+            }
+          },
+          {
+            "name": "acadYear",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2020"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/setApplicationErrata": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "description": "Set Errata Admin",
+        "summary": "Set Errata Admin",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "3"
+                },
+                "event": {
+                  "type": "string",
+                  "example": "true"
+                },
+                "user_id": {
+                  "type": "string",
+                  "example": "1516"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "document"
+                },
+                "app_id": {
+                  "type": "string",
+                  "example": "89"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Errata Admin"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getPaymentdeatils": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To get All Payments Details",
+        "description": "",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "inprocess"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/setResolve": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Resolve Payment issues",
+        "description": "Resolve Payment issues",
+        "parameters": [
+          {
+            "name": "pay_id",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "2"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getallpedingpayment": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To get All Pending Payments Details",
+        "description": "To get All Pending Payments Details",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "22-06-22"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "test@gmail.com"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "pending"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getAll_Paydetails": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To get All Pay Details",
+        "description": "To get All Pay Details",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "test"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "test@gmail.com"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/downloadExcel_date": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Download Excel file Datewise",
+        "description": "",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "22-05-22"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "22-06-22"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/students": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Get Students Details",
+        "description": "",
+        "security": [],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "vandana"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "vandana@edulab.in"
+            }
+          },
+          {
+            "name": "acadYear",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2020"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Get Succesfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/status": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Update Status active or inactive",
+        "description": "Update Status of users active or inactive",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "body",
+            "Required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "1516"
+                },
+                "status": {
+                  "type": "string",
+                  "example": "active"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status Updated Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/verifyOtp": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Verify OTP ",
+        "description": "Verify OTP",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "1516"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/application/student_feedback": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Students Feedback",
+        "description": "To Get Students Feedback",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "example": "11",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Students Data Get Successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/rejectApplicationOfverification": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Reject application",
+        "description": "To Reject application",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "1516"
+                },
+                "outward": {
+                  "type": "string",
+                  "example": "super@gmail.com"
+                },
+                "app_id": {
+                  "type": "string",
+                  "example": "7471"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/role_management/main": {
+      "get": {
+        "summary": "Retrieve sub-admin list",
+        "description": "Fetches a list of sub-admins with their role features, filtered by name and email if provided.",
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "required": false,
+            "description": "The page number for pagination (default is 1)"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "type": "string",
+            "required": false,
+            "description": "The name of the sub-admin to filter the results"
+          },
+          {
+            "in": "query",
+            "name": "email",
+            "type": "string",
+            "required": false,
+            "description": "The email of the sub-admin to filter the results"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sub-admin list retrieved successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Sub-admin list retrieved successfully"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "subadmins": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "John Doe"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "user@example.com"
+                          },
+                          "mobile": {
+                            "type": "string",
+                            "example": "1234567890"
+                          },
+                          "user_status": {
+                            "type": "string",
+                            "example": "active"
+                          },
+                          "subfeaturenames": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "studentmanagement"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, possibly due to invalid parameters or missing query parameters",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid request parameters"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Something went wrong"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/application/role_management/addUpdatesubAdmin": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Update Sub-Admin Data",
+        "description": "Update Sub-Admin Data",
+        "parameters": [
+          {
+            "name": "Update Subadmin",
+            "in": "body",
+            "security": [
+              {
+                "Bearer": []
+              }
+            ],
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "1631",
+                  "description": "User ID"
+                },
+                "subAdminData": {
+                  "type": "object",
+                  "example": {
+                    "name": "Radha",
+                    "surname": "Sharma",
+                    "email": "testmoi@gmail.com",
+                    "mobile": 123456987,
+                    "gender": "Female"
+                  },
+                  "description": "Data of SubAdmin"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/role_management/getRolesData": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get the roles data",
+        "description": "To Get the roles data",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Subadmin_Id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "394"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/role_management/setUpdateRole": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To upadte roles",
+        "description": "To update roles",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Update Role",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "roles": {
+                  "type": "string",
+                  "description": "Roles to Update",
+                  "example": "false"
+                },
+                "superroles": {
+                  "type": "string",
+                  "description": "SuperRoles to Update",
+                  "example": "true"
+                },
+                "source_array": {
+                  "type": "array",
+                  "description": "Source Array",
+                  "example": [
+                    {
+                      "resource": "guattestation"
+                    },
+                    {
+                      "resource": "guverification"
+                    },
+                    {
+                      "resource": "gusyverification"
+                    }
+                  ]
+                },
+                "activity": {
+                  "type": "string",
+                  "description": "Activity",
+                  "example": "activate"
+                },
+                "user_id": {
+                  "type": "string",
+                  "description": "User ID",
+                  "example": "1923"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success Message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "number",
+                  "description": "Status Code"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Success Message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed Message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "number",
+                  "description": "Status Code"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Failed Message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/application/role_management/getSubAdminData": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get SubAdmin Personal Data",
+        "description": "To Get SubAdmin Personal Data",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1529"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get Data Sucessfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/role_management/changeSubAdminStatus": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Change sub-admin status",
+        "description": "Change sub-admin status",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "body",
+            "description": "ID of the user",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "1529"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/regenerateCertificates": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Generate PDF",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1513"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Admin ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "602"
+            }
+          },
+          {
+            "name": "reg_reason",
+            "in": "query",
+            "description": "Reason for regeneration",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "this is for testing  V."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/role_management/getMenuRole": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Menu Role",
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "query",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "type": "string",
+              "example": "1529"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getFileData": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get File Data ",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "description": "Page No",
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date to get data",
+            "schema": {
+              "type": "string",
+              "example": "22-05-22"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/downloadFileExcel": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Download Excel file",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "date to get data",
+            "schema": {
+              "type": "string",
+              "example": "2023"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getPortalwaiseApplicationCount": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Portal wise Admin Count",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/adminDashboard/activitytracker": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Activity Data",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "22/02/23"
+            }
+          },
+          {
+            "name": "data",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Print button click by paprajapati@gujaratuniversity.ac.infor verification letters."
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "@gujaratuniversity.ac.infor verification letters."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/pickupdate": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To get the data of pickupdate",
+        "parameters": [
+          {
+            "name": "Pickup data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "1516"
+                },
+                "adminEmail": {
+                  "type": "string",
+                  "example": "super@gmail.com"
+                },
+                "app_id": {
+                  "type": "string",
+                  "example": "83"
+                },
+                "source": {
+                  "type": "string",
+                  "example": "guverification"
+                },
+                "date": {
+                  "type": "string",
+                  "example": "22-05-22"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/pickupmail": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To send the Pick Up mail ",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "1516"
+                },
+                "adminEmail": {
+                  "type": "string",
+                  "example": "super@gmail.com"
+                },
+                "app_id": {
+                  "type": "string",
+                  "example": "83"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/generatepdfform": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Generate PDF Form ",
+        "parameters": [
+          {
+            "name": "PDF form",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "app_id": {
+                  "type": "string",
+                  "example": "89"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "1516"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/updateStudentDetails": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Update the Users Personal Information ",
+        "parameters": [
+          {
+            "name": "Edit Data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "example": "1516"
+                },
+                "personalDetails": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "vandana"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "vandana@edulab.in"
+                    },
+                    "contactNo": {
+                      "type": "string",
+                      "example": "7894561235"
+                    },
+                    "marksheetName": {
+                      "type": "string",
+                      "example": "Vandana"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/saveEduDetails": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Update Educational Details ",
+        "parameters": [
+          {
+            "name": "Edit Data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "vandana@edulab.in"
+                },
+                "errataDetails": {
+                  "type": "object",
+                  "$ref": "#/definitions/Edit_Edu"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/saveInsDetails": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Upadte Institute Details ",
+        "parameters": [
+          {
+            "name": "Edit Data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "errataDetails": {
+                  "type": "object",
+                  "$ref": "#/definitions/Ins_Data"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/courseDetails": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Course.",
+        "parameters": [
+          {
+            "name": "course",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Adv. P.G.Dip.in Space Science And Its Admins"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Course Not Found"
+          }
+        }
+      }
+    },
+    "/application/getCourses": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Course List",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Course Not Found"
+          }
+        }
+      }
+    },
+    "/application/getColleges": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get College List",
+        "description": "No Parameters required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "College Not Found"
+          }
+        }
+      }
+    },
+    "/application/uploadDocument": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Upload Documents",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1516"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "3"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/getAllEmailActivityTracker": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get All Email Activity Data",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": "1"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Gujarat University : Admin Verification Email"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "shweta@edulab.in"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/role_management/getSuperMenuRole": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Get Super Role",
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/saveAddDetails": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "To Add Educational Details ",
+        "parameters": [
+          {
+            "name": "Add_Data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "documentDetailsData": {
+                  "type": "object",
+                  "$ref": "#/definitions/AddEduData"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/VerificationTypes": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get Verification Types value",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get Verification Types value",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "verificationData": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "marksheet"
+                      },
+                      "event": {
+                        "type": "string",
+                        "example": "true"
+                      },
+                      "documentCount": {
+                        "type": "string",
+                        "example": "3"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/student/courses": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get Course List",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Course Not Found"
+          }
+        }
+      }
+    },
+    "/student/colleges": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get College List",
+        "description": "No Parameters required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "College Not Found"
+          }
+        }
+      }
+    },
+    "/student/courseDetails": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get Course.",
+        "parameters": [
+          {
+            "name": "course",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Adv. P.G.Dip.in Space Science And Its Admins"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Course Not Found"
+          }
+        }
+      }
+    },
+    "/student/documentDetails": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get document Details.",
+        "parameters": [
+          {
+            "name": "doc_details",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "marksheet"
+                },
+                "documentDetailsData": {
+                  "$ref": "#/definitions/doc_Data"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get document Details.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/uploadDocument": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Upload Documents",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/getFileDetails": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "get file details",
+        "description": "get file details",
+        "parameters": [
+          {
+            "name": "file",
+            "description": "file_name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "tHRgnjFDoU.jpg"
+            }
+          },
+          {
+            "name": "user_id",
+            "description": "user id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "1516"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": " successfully"
+          },
+          "400": {
+            "description": "bad request"
+          }
+        }
+      }
+    },
+    "/student/institutionalDetails": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Institutional Details",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Update Institutional Details",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "marksheet"
+                },
+                "instituteData": {
+                  "type": "object",
+                  "properties": {
+                    "referenceNo": {
+                      "type": "string",
+                      "example": "1212111"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "test"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "Address"
+                    },
+                    "student_address": {
+                      "type": "string",
+                      "example": "Student_Address"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "vandana@edulab.in"
+                    }
+                  }
+                },
+                "selectedDelivery": {
+                  "type": "string",
+                  "example": "Digital"
+                },
+                "selectedDeliveryMode": {
+                  "type": "string",
+                  "example": "Normal"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/getPreviewData": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Preview Details",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/getPaymentAmount": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get Payment Amount",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/checkStepper": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get checkStepper details",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/addlanguage": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Add Language",
+        "parameters": [
+          {
+            "name": "language",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userid": {
+                  "type": "string",
+                  "example": "1516"
+                },
+                "value": {
+                  "type": "string",
+                  "example": "Gujarati"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/getAllApplications": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get All Admins details",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/generatepdfform": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Generate PDF Form ",
+        "parameters": [
+          {
+            "name": "pdf",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "app_id": {
+                  "type": "string",
+                  "example": "89"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/downloadFiles": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To download files",
+        "parameters": [
+          {
+            "name": "documentFile",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "AdminForm.pdf"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/validateDocumentDetails": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get valid Document Details",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "documents"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/downloadTemplate": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To download files",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/deletefile": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Delete Documents file",
+        "parameters": [
+          {
+            "name": "delete",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "doc_id": {
+                  "type": "string",
+                  "example": "5640"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/getApplicationsDetails": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get status and tracker of application",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/setPaymentIssueDetails": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Set PaymentIssue Details",
+        "description": "",
+        "parameters": [
+          {
+            "name": "PayIssue",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "emailId": {
+                      "type": "string",
+                      "example": "vandana@edulab.in"
+                    },
+                    "paymentDate": {
+                      "type": "string",
+                      "example": "2023-02-01T18:30:00.000Z"
+                    },
+                    "transactionId": {
+                      "type": "string",
+                      "example": "1234"
+                    },
+                    "orderId": {
+                      "type": "string",
+                      "example": "1234"
+                    },
+                    "bankRefNo": {
+                      "type": "string",
+                      "example": "1234"
+                    },
+                    "amount": {
+                      "type": "string",
+                      "example": "100"
+                    },
+                    "attac": {
+                      "type": "string",
+                      "example": "AIuZDItcSy.png"
+                    },
+                    "note": {
+                      "type": "string",
+                      "example": "Payment issued is solved"
+                    },
+                    "Pattern": {
+                      "type": "string",
+                      "example": "Single Payment"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/getPaymentIssueDetails": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get Payment Issue Details",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/deletePaymentDocument": {
+      "delete": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To delete Payment Issue Record",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/PaymentIssueUrl": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Set PaymentIssue Details",
+        "description": "",
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "The file to upload",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "name": "transcript_name",
+            "in": "query",
+            "description": "The file to upload",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "Payment Not Reflecting"
+            }
+          },
+          {
+            "name": "order_id",
+            "in": "query",
+            "description": "The file to upload",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "1234"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/checkSelectedTypes": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To  Check Selected Type",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/getVerificationTypesDetails": {
+      "get": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Get All Details of VerificationTypes",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/student/savePreviousAppData": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "To Save Previous AppData",
+        "description": "",
+        "parameters": [
+          {
+            "name": "",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "marksheet": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "noOfMarksheet": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "transcript": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "noOfTranscript": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "degreeCertificate": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "noOfDegree": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "sealedCover": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "noOfCopies": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "marksheetData": {
+                  "type": "string",
+                  "example": "null"
+                },
+                "source_from": {
+                  "type": "string",
+                  "example": "guverification"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/addStudents": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Add Students",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Stu_data",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstname": {
+                  "type": "string",
+                  "example": "Vandana"
+                },
+                "lastname": {
+                  "type": "string",
+                  "example": "Pal"
+                },
+                "fullName": {
+                  "type": "string",
+                  "example": "Pal Vandana"
+                },
+                "mobile": {
+                  "type": "string",
+                  "example": "1234542432"
+                },
+                "mobile_country_code": {
+                  "type": "string",
+                  "example": "91"
+                },
+                "postal_code": {
+                  "type": "string",
+                  "example": ""
+                },
+                "gender": {
+                  "type": "string",
+                  "example": "female"
+                },
+                "aadharNumber": {
+                  "type": "string",
+                  "example": "345456656665"
+                },
+                "enrollmentNo": {
+                  "type": "string",
+                  "example": "6565656566"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "vandana@edulab.in"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/deleteStudent": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To get the status of Check Stepper",
+        "description": "",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "description": "Agents user_id",
+                  "example": "2679"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/deleteApplication": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Delete Admin from orders table",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Stu_data",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "62"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/VerificationTypes": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get Verification Types value",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 13852
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Add Verification Types value",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string"
+                },
+                "verificationData": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "marksheet"
+                      },
+                      "event": {
+                        "type": "string",
+                        "example": "true"
+                      },
+                      "documentCount": {
+                        "type": "string",
+                        "example": "3"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/checkStepper": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To get the status of Check Stepper",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 13852
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/getAllApplications": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get All Admins details",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": 13852
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/documentDetails": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get document Details.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "Required": true,
+            "type": "string",
+            "schema": {
+              "example": "13852"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Add document Details.",
+        "parameters": [
+          {
+            "name": "doc_details",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "marksheet"
+                },
+                "documentDetailsData": {
+                  "$ref": "#/definitions/doc_Data"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/validateDocumentDetails": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get All Admins details",
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "13852"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "documents"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/institutionalDetails": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get institute Details.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "13852"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Update Institutional Details",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "marksheet"
+                },
+                "instituteData": {
+                  "type": "object",
+                  "properties": {
+                    "referenceNo": {
+                      "type": "string",
+                      "example": "1212111"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "test"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "Address"
+                    },
+                    "student_address": {
+                      "type": "string",
+                      "example": "Student_Address"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "vandana@edulab.in"
+                    }
+                  }
+                },
+                "selectedDelivery": {
+                  "type": "string",
+                  "example": "Digital"
+                },
+                "selectedDeliveryMode": {
+                  "type": "string",
+                  "example": "Normal"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/getPreviewData": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get Preview Data",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "13852"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/getPaymentAmount": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get Payment Amount",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "13852"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/getAllStudents": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get All Students",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "1"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "jitu"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "jitu@edulab.in"
+            }
+          },
+          {
+            "name": "acadYear",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "2019"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/getStudentDetails": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Get Students Details",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "13852"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/errataDetails": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To get Errata Documents Details",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "doc_id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "13852"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Update Errata Documents Details",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "errataDetails",
+            "description": "Errata details for the document",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errataDetails": {
+                  "type": "object",
+                  "$ref": "#/definitions/ErrataDetails"
+                }
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/deletefile": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Delete File",
+        "parameters": [
+          {
+            "name": "doc_idd",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "doc_id": {
+                  "type": "string",
+                  "example": "62"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/uploadDocument": {
+      "post": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To Upload Documents",
+        "parameters": [
+          {
+            "name": "doc_idd",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "string",
+                  "example": "13852"
+                },
+                "doc_id": {
+                  "type": "string",
+                  "example": "2"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/agent/getStudentEnrollmentDetails": {
+      "get": {
+        "tags": [
+          "Agent"
+        ],
+        "summary": "To get Student Enrollment Details",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "user_id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "example": "13852"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/getRegisterUser": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/getCourses": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Get Course List",
+        "description": "No Parameter required",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Course Not Found"
+          }
+        }
+      }
+    },
+    "/get_otp": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Get OTP",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "example": "1516"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/update_otp": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Update OTP",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "example": "1516"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/checkEmail": {
+      "post": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Check Email",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "string",
+                  "example": "true"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/getUserDataByEmail": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Get User Data by Emailid",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": "vandana@edulab.in"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/post_appdata": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Get Admin Data",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": "vandana@edulab.in"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/post_appdata_byApp_id": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Get Admin Data By Admin Id",
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": "89"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/logOutActivity": {
+      "get": {
+        "tags": [
+          "RegisteredUser"
+        ],
+        "summary": "To Get Admin Data By Admin Id",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "example": "vandana@edulab.in"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/application/downloadExcelTotalApplication": {
+      "get": {
+        "summary": "Download Total Applications as Excel",
+        "description": "Generates an Excel file for applications filtered by tracker, type, start date, and end date.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The type of application (e.g., admission, verification).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tracker",
+            "in": "query",
+            "description": "Tracker ID to filter applications.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The start date for filtering applications (format: YYYY-MM-DD).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The end date for filtering applications (format: YYYY-MM-DD).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excel file generated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Path to the generated Excel file.",
+                      "example": "/public/upload/Excel/tracker_type_Verification.xlsx"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No data found for the given filters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/application/downloadExcel_dateTotal": {
+      "get": {
+        "summary": "Download Payment Applications as Excel",
+        "description": "Generates an Excel file for payment-related application data filtered by tracker, type, start date, and end date.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The type of application (e.g., payment, verification).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tracker",
+            "in": "query",
+            "description": "Tracker ID to filter applications.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "The start date for filtering applications (format: YYYY-MM-DD).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "The end date for filtering applications (format: YYYY-MM-DD).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excel file generated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Path to the generated Excel file.",
+                      "example": "/public/upload/Excel/tracker_type_Verification.xlsx"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No data found for the given filters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/application/mergeCertificate": {
+      "get": {
+        "summary": "Merge User Verification Certificates",
+        "description": "Combines multiple user certificates into a single PDF based on the verification types selected by the user.",
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "query",
+            "description": "The application ID associated with the user.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "The unique ID of the user.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Certificates merged successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "The URL to the merged certificate PDF.",
+                      "example": "/public/upload/documents/userId/app_id_Certificate.pdf"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to merge files.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Files cannot be merged"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/application/downloadpdf": {
+      "get": {
+        "summary": "Download a PDF File",
+        "description": "Provides the functionality to download a PDF document from the specified file path.",
+        "parameters": [
+          {
+            "name": "documentFile",
+            "in": "query",
+            "description": "The file path of the document to be downloaded.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "/path/to/document/sample.pdf"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF file downloaded successfully.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Missing or invalid document file path.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid document file path."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Document not found at the specified path."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/application/getFileDetailsDocument": {
+      "get": {
+        "summary": "Retrieve File Details",
+        "description": "Fetch details of a document, including its file extension and file source URL, based on the file name and user ID.",
+        "parameters": [
+          {
+            "name": "file",
+            "in": "query",
+            "description": "The name of the file to fetch details for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "exampleFile.pdf"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "The user ID associated with the document.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 12345
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved file details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "extension": {
+                          "type": "string",
+                          "example": "pdf"
+                        },
+                        "src": {
+                          "type": "string",
+                          "example": "http://example.com/upload/documents/12345/exampleFile.pdf"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Missing or invalid query parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid file name or user ID."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Document not found."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Admin"
+        ]
+      }
+    },
+    "/application/removefromreject": {
+      "post": {
+        "summary": "Restore Application",
+        "description": "Restores an application from rejected status to pending and updates the tracker and status.",
+        "tags": [
+          "Admin"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appl_id": {
+                    "type": "integer",
+                    "description": "The ID of the application to be restored."
+                  },
+                  "user_id": {
+                    "type": "integer",
+                    "description": "The ID of the user performing the action."
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Additional value if required."
+                  }
+                },
+                "required": [
+                  "appl_id",
+                  "user_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Application successfully restored.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request or Permission Denied.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "You don't have permission"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/application/paid_students": {
+      "get": {
+        "summary": "Retrieve Paid Students",
+        "description": "Fetches a paginated list of students who have completed their payment, with optional filters.",
+        "tags": [
+          "Students"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "Page number for pagination."
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by student ID."
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by student name."
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by student email."
+          },
+          {
+            "name": "acadYear",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by academic year."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Students retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Student retrieve successfully"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "tracker": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "user_id": {
+                            "type": "integer"
+                          },
+                          "notes": {
+                            "type": "string"
+                          },
+                          "application_date": {
+                            "type": "string",
+                            "format": "date"
+                          }
+                        }
+                      }
+                    },
+                    "total_count": {
+                      "type": "object",
+                      "properties": {
+                        "totalLength": {
+                          "type": "integer"
+                        },
+                        "filteredLength": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/application/adminResetPassword": {
+      "post": {
+        "summary": "Reset user password by admin",
+        "description": "Allows an admin to reset the password of a user by email.",
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "user@example.com",
+                      "description": "Email of the user whose password needs to be reset"
+                    }
+                  },
+                  "required": [
+                    "email"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "user@example.com"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Password Reset successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password reset failed",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Something went wrong while changing your Password"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/application/nameChange": {
+      "post": {
+        "summary": "Update user profile",
+        "description": "Allows a user to change their profile details such as name, email, mobile number, and marksheet name.",
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "userProfile",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fname": {
+                  "type": "string",
+                  "example": "John Doe",
+                  "description": "User's first name"
+                },
+                "Email": {
+                  "type": "string",
+                  "example": "user@example.com",
+                  "description": "User's email address"
+                },
+                "mobileNo": {
+                  "type": "string",
+                  "example": "1234567890",
+                  "description": "User's mobile number"
+                },
+                "nameofmarksheet": {
+                  "type": "string",
+                  "example": "John Doe",
+                  "description": "User's name on the marksheet"
+                },
+                "data": {
+                  "type": "integer",
+                  "example": 1,
+                  "description": "User's ID (the ID of the user to be updated)"
+                }
+              },
+              "required": [
+                "fname",
+                "Email",
+                "mobileNo",
+                "nameofmarksheet",
+                "data"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 200
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "user@example.com"
+                    },
+                    "mobile": {
+                      "type": "string",
+                      "example": "1234567890"
+                    },
+                    "marksheetName": {
+                      "type": "string",
+                      "example": "John Doe"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Name Changed successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Failed to update user profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Something went wrong."
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/student/generateSerialNumbers": {
+      "get": {
+        "summary": "Generate Serial Numbers",
+        "description": "Generates serial numbers for a given user and application ID based on verification type.",
+        "tags": ["Students"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "description": "ID of the user.",
+            "schema": {
+              "type": "integer",
+              "example": 123
+            }
+          },
+          {
+            "name": "app_id",
+            "in": "query",
+            "required": true,
+            "description": "ID of the application.",
+            "schema": {
+              "type": "integer",
+              "example": 456
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Serial number generation successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Missing or invalid parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid user_id or app_id."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred while generating serial numbers."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/student/mergedocument": {
+      "get": {
+        "summary": "Merge User Documents",
+        "description": "Merges all documents for a specified user and application into a single PDF file.",
+        "tags": ["Students"],
+        "parameters": [
+          {
+            "name": "app_id",
+            "in": "query",
+            "required": true,
+            "description": "ID of the application.",
+            "schema": {
+              "type": "integer",
+              "example": 123
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "description": "ID of the user.",
+            "schema": {
+              "type": "integer",
+              "example": 456
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Documents merged successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "URL of the merged PDF document.",
+                      "example": "http://example.com/upload/documents/456/123_Documents.pdf"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Unable to merge files.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Files cannot be merged."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An unexpected error occurred while processing the request."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/student/paymentreceipt": {
+      "post": {
+        "summary": "Generate Payment Receipt",
+        "description": "Generates a payment receipt for a user based on their application ID and payment details.",
+        "tags": ["Students"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "app_id": {
+                    "type": "integer",
+                    "description": "ID of the application for which the payment receipt is generated.",
+                    "example": 123
+                  }
+                },
+                "required": ["app_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Payment receipt generated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "URL or file name of the generated payment receipt.",
+                      "example": "123_ApplicationForm.pdf"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Failed to generate the payment receipt.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Files cannot be merged."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An unexpected error occurred while processing the request."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/student/deletedoc": {
+      "delete": {
+        "summary": "Delete Document",
+        "description": "Deletes a document (educational or institute details) based on its ID and type.",
+        "tags": ["Students"],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "description": "The type of document to delete ('edu_details' or 'Ins_details').",
+            "schema": {
+              "type": "string",
+              "enum": ["edu_details", "Ins_details"],
+              "example": "edu_details"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "The ID of the document to be deleted.",
+            "schema": {
+              "type": "integer",
+              "example": 123
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Document deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Details of the deleted document."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Document not found or invalid parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An unexpected error occurred."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/student/getSupportiveData": {
+      "get": {
+        "summary": "Get Supportive Data",
+        "description": "Retrieves supportive documents for the authenticated user with a null application ID.",
+        "tags": ["Students"],
+        "responses": {
+          "200": {
+            "description": "Supportive documents retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "user_id": {
+                            "type": "integer",
+                            "example": 101
+                          },
+                          "app_id": {
+                            "type": "null",
+                            "example": null
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "supportive"
+                          },
+                          "file": {
+                            "type": "string",
+                            "example": "document.pdf"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-15T12:34:56Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-01-15T12:34:56Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Failed to retrieve supportive documents.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "Error message describing the issue."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/agent/getSupportiveData": {
+      "get": {
+        "summary": "Retrieve Supportive Data",
+        "description": "Fetch all supportive document data for a user where `app_id` is null and type is 'supportive'.",
+        "tags": ["Agent"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "description": "The ID of the user whose supportive data is to be retrieved.",
+            "schema": {
+              "type": "integer",
+              "example": 12345
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supportive data retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "user_id": {
+                            "type": "integer",
+                            "example": 12345
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "supportive"
+                          },
+                          "app_id": {
+                            "type": "null",
+                            "example": null
+                          },
+                          "file": {
+                            "type": "string",
+                            "example": "supportive_doc.pdf"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Failed to retrieve supportive data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agent/editStudent": {
+      "post": {
+        "summary": "Edit Student Details",
+        "description": "Updates the details of a student based on their user ID.",
+        "tags": ["Agent"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "integer",
+                    "description": "The ID of the user whose details are to be updated.",
+                    "example": 123
+                  },
+                  "studentData": {
+                    "type": "object",
+                    "properties": {
+                      "firstName": {
+                        "type": "string",
+                        "description": "The first name of the student.",
+                        "example": "John"
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "description": "The last name of the student.",
+                        "example": "Doe"
+                      },
+                      "fullName": {
+                        "type": "string",
+                        "description": "The full name of the student.",
+                        "example": "John Doe"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "The email address of the student.",
+                        "example": "johndoe@example.com"
+                      },
+                      "mobile": {
+                        "type": "string",
+                        "description": "The mobile number of the student.",
+                        "example": "9876543210"
+                      }
+                    },
+                    "required": ["firstName", "lastName", "email", "mobile"]
+                  }
+                },
+                "required": ["user_id", "studentData"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Student details updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Details of the updated user."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Data not updated or invalid input.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "Data not updated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - An unexpected error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An unexpected error occurred."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/student/VerificationTypes": {
+      "post": {
+        "summary": "Update or create verification types for a user",
+        "description": "This API updates existing verification types or creates new ones based on the input data.",
+        "tags": ["Student"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "verificationData": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "description": "Type of verification (e.g., marksheet, degree)."
+                        },
+                        "event": {
+                          "type": "string",
+                          "description": "Event details for the verification."
+                        },
+                        "documentCount": {
+                          "type": "integer",
+                          "description": "Number of documents provided for this verification type."
+                        }
+                      },
+                      "required": ["type", "event", "documentCount"]
+                    }
+                  }
+                },
+                "required": ["verificationData"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update or creation of verification types.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Updated or newly created verification type details."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to update or create verification types.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "loginDto": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "jitu@edulab.in"
+        },
+        "password": {
+          "type": "string",
+          "example": "123456"
+        }
+      }
+    },
+    "signUpDto": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        },
+        "create_by": {
+          "type": "string"
+        }
+      }
+    },
+    "changePasswordDto": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "object",
+          "properties": {
+            "expires_in": {
+              "type": "integer"
+            },
+            "access_token": {
+              "type": "string"
+            },
+            "refresh_token": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "user_type": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer"
+        },
+        "login": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "zipCode": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Settings": {
+      "type": "object",
+      "properties": {
+        "themeName": {
+          "type": "string"
+        }
+      }
+    },
+    "UserDto": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer"
+        },
+        "user_type": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "zipCode": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "studentData": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "seat_number": {
+          "type": "string"
+        },
+        "stream": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "semester": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "payment_status": {
+          "type": "string"
+        },
+        "request_type": {
+          "type": "string"
+        },
+        "college_name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "mobile": {
+          "type": "string"
+        },
+        "userEmail": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "acadYear_passing": {
+          "type": "string"
+        }
+      }
+    },
+    "verifyDoc": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "example": "11865"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "10635"
+        },
+        "checked": {
+          "type": "string",
+          "example": "true"
+        },
+        "type": {
+          "type": "string",
+          "example": "marksheet"
+        },
+        "doc_id": {
+          "type": "string",
+          "example": "5628"
+        },
+        "outward": {
+          "type": "string",
+          "example": "144555"
+        }
+      }
+    },
+    "Edit_Edu": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "5634"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "10635"
+        },
+        "user_id": {
+          "type": "string",
+          "example": "11865"
+        },
+        "collegeName": {
+          "type": "string",
+          "example": "A T I R A, Navrangpura, Ahmedabad"
+        },
+        "courseName": {
+          "type": "string",
+          "example": "Adv. P.G.Dip.in Space Science And Its Admins"
+        },
+        "courseType": {
+          "type": "string",
+          "example": "Regular"
+        },
+        "pattern": {
+          "type": "string",
+          "example": "semester"
+        },
+        "semester": {
+          "type": "string",
+          "example": "Semester VI"
+        },
+        "seatNo": {
+          "type": "string",
+          "example": "64545"
+        },
+        "passingMonthacadYear": {
+          "type": "string",
+          "example": "06/2019"
+        },
+        "convocationDate": {
+          "type": "string",
+          "example": "2019-06-01"
+        },
+        "result": {
+          "type": "string",
+          "example": "Pass"
+        },
+        "enrollmentStart": {
+          "type": "string",
+          "example": ""
+        },
+        "enrollmentEnd": {
+          "type": "string",
+          "example": ""
+        },
+        "majorSubject": {
+          "type": "string",
+          "example": "Hindi"
+        },
+        "totalGrade": {
+          "type": "string",
+          "example": ""
+        },
+        "avgGrade": {
+          "type": "string",
+          "example": ""
+        },
+        "mbaCheck": {
+          "type": "string",
+          "example": ""
+        },
+        "course_name": {
+          "type": "string",
+          "example": "Adv_P_G_Dip_in_Space_Science_And_Its_Admins"
+        },
+        "convocationNo": {
+          "type": "string",
+          "example": "12345"
+        }
+      }
+    },
+    "Ins_Data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "2019"
+        },
+        "referenceNo": {
+          "type": "string",
+          "example": "2494"
+        },
+        "name": {
+          "type": "string",
+          "example": "John"
+        },
+        "address": {
+          "type": "string",
+          "example": "address"
+        },
+        "deliveryOption": {
+          "type": "string",
+          "example": "Digital"
+        }
+      }
+    },
+    "AddEduData": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "example": "11865"
+        },
+        "app_id": {
+          "type": "string",
+          "example": "10635"
+        },
+        "collegeName": {
+          "type": "string",
+          "example": "I. D. Patel Commerce College,Nadiad"
+        },
+        "courseType": {
+          "type": "string",
+          "example": "Regular"
+        },
+        "pattern": {
+          "type": "string",
+          "example": ""
+        },
+        "semester": {
+          "type": "string",
+          "example": ""
+        },
+        "seatNo": {
+          "type": "string",
+          "example": ""
+        },
+        "passingMonthacadYear": {
+          "type": "string",
+          "example": "06/2019"
+        },
+        "convocationDate": {
+          "type": "string",
+          "example": ""
+        },
+        "result": {
+          "type": "string",
+          "example": "First Class"
+        },
+        "enrollmentStart": {
+          "type": "string",
+          "example": ""
+        },
+        "enrollmentEnd": {
+          "type": "string",
+          "example": ""
+        },
+        "majorSubject": {
+          "type": "string",
+          "example": ""
+        },
+        "totalGrade": {
+          "type": "string",
+          "example": ""
+        },
+        "courseName": {
+          "type": "string",
+          "example": "B.A.,LL.B."
+        },
+        "avgGrade": {
+          "type": "string",
+          "example": ""
+        },
+        "mbaCheck": {
+          "type": "string",
+          "example": ""
+        },
+        "type": {
+          "type": "string",
+          "example": "marksheet"
+        }
+      }
+    },
+    "doc_Data": {
+  "type": "object",
+  "properties": {
+    "courseName": {
+      "type": "string",
+      "example": "B.A.,LL.B."
+    },
+    "courseType": {
+      "type": "string",
+      "example": "Regular"
+    },
+    "seatNo": {
+      "type": "string",
+      "example": "11865"
+    },
+    "PassingMonthYear": {
+      "type": "string",
+      "example": "2022-7-02"
+    },
+    "semester": {
+      "type": "string",
+      "example": "6"
+    },
+    "collegeName": {
+      "type": "string",
+      "example": "I. D. Patel Commerce College, Nadiad"
+    },
+    "convocationDate": {
+      "type": "string",
+      "example": "2022-10-02"
+    },
+    "result": {
+      "type": "string",
+      "example": "Pass"
+    },
+    "transcriptNo": {
+      "type": "string",
+      "example": "T12345"
+    },
+    "convocationNo": {
+      "type": "string",
+      "example": "C67890"
+    },
+    "sgpi": {
+      "type": "string",
+      "example": "9.5"
+    },
+    "user_id": {
+      "type": "string",
+      "example": "U12345"
+    },
+    "type": {
+      "type": "string",
+      "example": "Regular"
+    },
+    "course_name": {
+      "type": "string",
+      "example": "BA_LLB"
+    },
+    "grade": {
+      "type": "string",
+      "example": "A"
+    }
+  }
+}
+,
+    "ErrataDetails": {
+  "type": "object",
+  "properties": {
+    "courseName": {
+      "type": "string",
+      "description": "Name of the course",
+      "example": "Course Name"
+    },
+    "seatNo": {
+      "type": "string",
+      "description": "Seat number",
+      "example": "2134"
+    },
+    "semester": {
+      "type": "string",
+      "description": "Semester",
+      "example": ""
+    },
+    "pattern": {
+      "type": "string",
+      "description": "Pattern of the course",
+      "example": "2020 Pattern"
+    },
+    "PassingMonthYear": {
+      "type": "string",
+      "description": "Month and year of passing",
+      "example": "2021-05"
+    },
+    "convocationDate": {
+      "type": "string",
+      "description": "Convocation date",
+      "example": "2023-05"
+    },
+    "convocationNo": {
+      "type": "string",
+      "description": "Convocation number",
+      "example": "123456"
+    },
+    "transcriptNo": {
+      "type": "string",
+      "description": "Transcript number",
+      "example": "T123456789"
+    },
+    "resultClass": {
+      "type": "string",
+      "description": "Result class",
+      "example": "Pass"
+    },
+    "lock_transcript": {
+      "type": "string",
+      "description": "Lock transcript status",
+      "example": "changed"
+    }
+  }
+}
+
+  }
+}
